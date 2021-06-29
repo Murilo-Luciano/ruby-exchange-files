@@ -10,8 +10,8 @@ puts "Connected to server: #{server_addr}, port: #{server_port}"
 input_verb = ARGV[0]
 input_path = ARGV[1]
 input_protocol = "HarryPotter/1.0"
-
-input = input_verb + " " + input_path + " " + input_protocol + "\n" + "HEADER" + "\n"
+input_header = "host: localhost:3333\nheader: body\n"
+input = input_verb + " " + input_path + " " + input_protocol + "\n" + input_header + "\n"
 # Sends input to the server with the protocol format
 puts input
 server.write "#{input}"
