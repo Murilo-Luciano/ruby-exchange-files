@@ -11,11 +11,13 @@ loop do
   # Reads the input sent by the client
   #client_input_str = client.gets
   client_input = client.gets.gsub("\"", "").gsub(",", "").gsub("[", "").gsub("]","").split
-  p client_input
+  client_header = client.gets
+  puts client_input
+  puts client_header
   client_verb = client_input[0]
   client_path = client_input[1]
   client_protocol = client_input[2]
-  client_header = client_input[3]
+  
 
   puts client_path
   # If client input ends with /
