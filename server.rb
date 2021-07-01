@@ -19,11 +19,8 @@ end
 
 loop do
   puts "Waiting Client..."
-  # Accepts the client connection
   client = server.accept 
   puts "Client Connected!"
-  # Reads the input sent by the client
-  #client_input_str = client.gets
   client_input = client.gets.gsub("\"", "").gsub(",", "").gsub("[", "").gsub("]","").split
   
 
@@ -40,9 +37,7 @@ loop do
   
 
   puts client_path
-  # If client input ends with /
-  #HarryPotter/1.0
-  #HTTP/1.1
+  
   if client_verb == "GET" && client_protocol == "HTTP/1.1"
     
     if client_path.match(/\/$/)
@@ -50,14 +45,12 @@ loop do
       puts "MATCH"
       # Returns directory list to the client
       client.puts list_file(Dir[".#{client_path}*"])
-      #client.close
-    else
-
-      
+    elsif client_path.match(/\./)
       # If file exists, returns it to the client
-      if File.exists?("#{client_path}")
+      if File.exists?(".#{client_path}")
+        puts "entrou"
         client.puts client_protocol + " " + "200 OK" + "\n\n"
-        File.open("#{client_path}", 'rb') do |file|
+        File.open(".#{client_path}", 'rb') do |file|
           while chunk = file.read(SIZE)
             client.write(chunk)
           end
@@ -67,6 +60,16 @@ loop do
         end
       else
         client.puts client_protocol + " " + "404 Not Found" + "\n\n"
+      end
+    else
+      #client_path do not end with "/" and don't have any "."
+
+      client_path = client_path + "/"
+      if client_path.match(/\/$/)
+        client.puts client_protocol + " " + "200 OK" + "\n\n"
+        puts "MATCH"
+        # Returns directory list to the client
+        client.puts list_file(Dir[".#{client_path}*"])
       end
     end
     
